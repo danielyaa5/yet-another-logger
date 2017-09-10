@@ -108,11 +108,17 @@ class LogManager extends EventEmitter {
     return _proxyMethods(log, ['info', 'warn', 'error', 'trace', 'fatal'], () => this.incWaiting());
   }
 
-  incWaiting() {
+  /**
+   * @private
+   */
+  _incWaiting() {
     this.waiting += 1;
   }
 
-  decWaiting() {
+  /**
+   * @private
+   */
+  _decWaiting() {
     this.waiting -= 1;
   }
 
