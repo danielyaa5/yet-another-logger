@@ -115,7 +115,12 @@ class LogManager extends EventEmitter {
     const log = this.bunyanFactory(options, cb);
     log.parent = this;
 
-    return _proxyMethods(log, ['info', 'warn', 'error', 'trace', 'fatal'], () => this._incWaiting());
+    const levelsToProxy = ['info', 'warn', 'error', 'trace', 'fatal'];
+
+    if (isDev()) {
+      levelsToProxy.push('debug');
+    }
+    return _proxyMethods(log, levelsToProxy, () => this._incWaiting());
   }
 
   /**

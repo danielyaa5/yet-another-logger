@@ -165,7 +165,12 @@ var LogManager = function (_EventEmitter) {
       var log = this.bunyanFactory(options, cb);
       log.parent = this;
 
-      return _proxyMethods(log, ['info', 'warn', 'error', 'trace', 'fatal'], function () {
+      var levelsToProxy = ['info', 'warn', 'error', 'trace', 'fatal'];
+
+      if (isDev()) {
+        levelsToProxy.push('debug');
+      }
+      return _proxyMethods(log, levelsToProxy, function () {
         return _this3._incWaiting();
       });
     }
