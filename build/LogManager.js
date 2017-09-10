@@ -6,7 +6,7 @@ const _ = require('lodash');
 
 const isProd = () => {
   const prodEnvs = ['production', 'prod'];
-  return prodEnvs.contains(process.env.NODE_ENV);
+  return prodEnvs.includes(process.env.NODE_ENV);
 };
 const isDev = () => !isProd();
 const noop = () => true;
@@ -74,7 +74,7 @@ class LogManager extends EventEmitter {
 
     const client = new Bunyan2Loggly(this.logglyConfig, null, null, () => {
       cb();
-      this.decWaiting();
+      this._decWaiting();
       if (this.getWaiting() === 0) {
         this.emit('done');
       }
@@ -105,14 +105,20 @@ class LogManager extends EventEmitter {
 
     const log = this.bunyanFactory(options, cb);
 
-    return _proxyMethods(log, ['info', 'warn', 'error', 'trace', 'fatal'], () => this.incWaiting());
+    return _proxyMethods(log, ['info', 'warn', 'error', 'trace', 'fatal'], () => this._incWaiting());
   }
 
-  incWaiting() {
+  /**
+   * @private
+   */
+  _incWaiting() {
     this.waiting += 1;
   }
 
-  decWaiting() {
+  /**
+   * @private
+   */
+  _decWaiting() {
     this.waiting -= 1;
   }
 
