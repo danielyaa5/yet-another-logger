@@ -1,15 +1,43 @@
-const bunyan = require('bunyan');
-const bformat = require('bunyan-format');
-const Bunyan2Loggly = require('bunyan-loggly');
-const EventEmitter = require('events');
-const _ = require('lodash');
+'use strict';
 
-const isProd = () => {
-  const prodEnvs = ['production', 'prod'];
+var _getPrototypeOf = require('babel-runtime/core-js/object/get-prototype-of');
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = require('babel-runtime/helpers/createClass');
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = require('babel-runtime/helpers/possibleConstructorReturn');
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = require('babel-runtime/helpers/inherits');
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var bunyan = require('bunyan');
+var bformat = require('bunyan-format');
+var Bunyan2Loggly = require('bunyan-loggly');
+var EventEmitter = require('events');
+var _ = require('lodash');
+
+var isProd = function isProd() {
+  var prodEnvs = ['production', 'prod'];
   return prodEnvs.includes(process.env.NODE_ENV);
 };
-const isDev = () => !isProd();
-const noop = () => true;
+var isDev = function isDev() {
+  return !isProd();
+};
+var noop = function noop() {
+  return true;
+};
 
 /**
  *
@@ -20,15 +48,19 @@ const noop = () => true;
  * @returns {Object}
  */
 function _proxyMethods(obj, methods, proxy) {
-  const handler = {
-    get(target, propKey) {
-      const origMethod = target[propKey];
+  var handler = {
+    get: function get(target, propKey) {
+      var origMethod = target[propKey];
       if (!_.includes(methods, propKey)) {
         return origMethod;
       }
 
-      return function (...args) {
-        const result = origMethod.apply(this, args);
+      return function () {
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+          args[_key] = arguments[_key];
+        }
+
+        var result = origMethod.apply(this, args);
         proxy();
         return result;
       };
@@ -44,7 +76,10 @@ function _proxyMethods(obj, methods, proxy) {
  * @see https://www.loggly.com/docs/node-js-logs/
  * @see https://github.com/trentm/node-bunyan
  */
-class LogManager extends EventEmitter {
+
+var LogManager = function (_EventEmitter) {
+  (0, _inherits3.default)(LogManager, _EventEmitter);
+
   /**
    *
    * @param {Object}  logglyConfig
@@ -53,12 +88,18 @@ class LogManager extends EventEmitter {
    * @param {Object}  [options]
    * @param {Boolean} [options.logToStdoutInDev=true]
    */
-  constructor(logglyConfig, options) {
-    super();
-    const defaultOpts = { logToStdoutInDev: true };
-    this.options = _.defaultsDeep(options, defaultOpts);
-    this.logglyConfig = logglyConfig;
-    this.waiting = 0;
+  function LogManager(logglyConfig, options) {
+    (0, _classCallCheck3.default)(this, LogManager);
+
+    var _this = (0, _possibleConstructorReturn3.default)(this, (LogManager.__proto__ || (0, _getPrototypeOf2.default)(LogManager)).call(this));
+
+    var defaultOpts = { logToStdoutInDev: true };
+    _this.options = _.defaultsDeep(options, defaultOpts);
+    _this.logglyConfig = logglyConfig;
+    _this.waiting = 0;
+    _this.bunyanFactory = _this.bunyanFactory.bind(_this);
+    _this.loggerFactory = _this.loggerFactory.bind(_this);
+    return _this;
   }
 
   /**
@@ -67,64 +108,100 @@ class LogManager extends EventEmitter {
    * @param {Object} [options={}]
    * @param {Function} [cb=noop]
    */
-  bunyanFactory(options, cb) {
-    cb = cb || noop;
-    const defaultOpts = {};
-    this.options = _.defaultsDeep(options, defaultOpts);
 
-    const client = new Bunyan2Loggly(this.logglyConfig, null, null, () => {
-      cb();
-      this._decWaiting();
-      if (this.getWaiting() === 0) {
-        this.emit('done');
+
+  (0, _createClass3.default)(LogManager, [{
+    key: 'bunyanFactory',
+    value: function bunyanFactory(options, cb) {
+      var _this2 = this;
+
+      cb = cb || noop;
+      var defaultOpts = {};
+      this.options = _.defaultsDeep(options, defaultOpts);
+
+      var client = new Bunyan2Loggly(this.logglyConfig, null, null, function () {
+        cb();
+        _this2._decWaiting();
+        if (_this2.getWaiting() === 0) {
+          _this2.emit('done');
+        }
+      });
+
+      // create the logger
+      var bunyanConfig = {
+        name: options.name,
+        streams: [{ type: 'raw', stream: client }]
+      };
+
+      if (isDev() && this.options.logToStdoutInDev) {
+        bunyanConfig.streams.push({ stream: bformat({ outputMode: 'long' }) });
       }
-    });
 
-    // create the logger
-    const bunyanConfig = {
-      name: options.name,
-      streams: [{ type: 'raw', stream: client }]
-    };
-
-    if (isDev() && this.options.logToStdoutInDev) {
-      bunyanConfig.streams.push({ stream: bformat({ outputMode: 'long' }) });
+      return bunyan.createLogger(bunyanConfig);
     }
 
-    return bunyan.createLogger(bunyanConfig);
-  }
+    /**
+     * Creates a logger instance
+     * @memberOf LogManager
+     * @param {Object} [options={}]
+     * @param {Function} [cb=null]
+     */
 
-  /**
-   * Creates a logger instance
-   * @memberOf LogManager
-   * @param {Object} [options={}]
-   * @param {Function} [cb=null]
-   */
-  loggerFactory(options, cb) {
-    const defaultOpts = {};
-    options = _.defaultsDeep(options, defaultOpts);
+  }, {
+    key: 'loggerFactory',
+    value: function loggerFactory(options, cb) {
+      var _this3 = this;
 
-    const log = this.bunyanFactory(options, cb);
+      var defaultOpts = {};
+      options = _.defaultsDeep(options, defaultOpts);
 
-    return _proxyMethods(log, ['info', 'warn', 'error', 'trace', 'fatal'], () => this._incWaiting());
-  }
+      var log = this.bunyanFactory(options, cb);
 
-  /**
-   * @private
-   */
-  _incWaiting() {
-    this.waiting += 1;
-  }
+      return _proxyMethods(log, ['info', 'warn', 'error', 'trace', 'fatal'], function () {
+        return _this3._incWaiting();
+      });
+    }
 
-  /**
-   * @private
-   */
-  _decWaiting() {
-    this.waiting -= 1;
-  }
+    /**
+     * @private
+     */
 
-  getWaiting() {
-    return this.waiting;
-  }
+  }, {
+    key: '_incWaiting',
+    value: function _incWaiting() {
+      this.waiting += 1;
+    }
+
+    /**
+     * @private
+     */
+
+  }, {
+    key: '_decWaiting',
+    value: function _decWaiting() {
+      this.waiting -= 1;
+    }
+  }, {
+    key: 'getWaiting',
+    value: function getWaiting() {
+      return this.waiting;
+    }
+  }]);
+  return LogManager;
+}(EventEmitter);
+
+/**
+ *
+ * @param {Object}  logglyConfig
+ * @param {String}  logglyConfig.token
+ * @param {String}  logglyConfig.subdomain
+ * @param {Object}  [options]
+ * @param {Boolean} [options.logToStdoutInDev=true]
+ */
+
+
+function logManagerFactory(logglyConfig, options) {
+  return new LogManager(logglyConfig, options);
 }
 
-module.exports = LogManager;
+module.exports = logManagerFactory;

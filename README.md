@@ -41,6 +41,20 @@ describe('foo', function() {
 ```
 ## Documentation
 
+## Classes
+
+<dl>
+<dt><a href="#LogManager">LogManager</a> ⇐ <code>EventEmitter</code></dt>
+<dd></dd>
+</dl>
+
+## Functions
+
+<dl>
+<dt><a href="#logManagerFactory">logManagerFactory(logglyConfig, [options])</a></dt>
+<dd></dd>
+</dl>
+
 <a name="LogManager"></a>
 
 ## LogManager ⇐ <code>EventEmitter</code>
@@ -50,6 +64,19 @@ describe('foo', function() {
 
 - https://www.loggly.com/docs/node-js-logs/
 - https://github.com/trentm/node-bunyan
+
+<a name="logManagerFactory"></a>
+
+## logManagerFactory(logglyConfig, [options])
+**Kind**: global function  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| logglyConfig | <code>Object</code> |  | 
+| logglyConfig.token | <code>String</code> |  | 
+| logglyConfig.subdomain | <code>String</code> |  | 
+| [options] | <code>Object</code> |  | 
+| [options.logToStdoutInDev] | <code>Boolean</code> | <code>true</code> | 
 
 
 ## Contributing

@@ -59,6 +59,8 @@ class LogManager extends EventEmitter {
     this.options = _.defaultsDeep(options, defaultOpts);
     this.logglyConfig = logglyConfig;
     this.waiting = 0;
+    this.bunyanFactory = this.bunyanFactory.bind(this);
+    this.loggerFactory = this.loggerFactory.bind(this);
   }
 
   /**
@@ -67,7 +69,7 @@ class LogManager extends EventEmitter {
    * @param {Object} [options={}]
    * @param {Function} [cb=noop]
    */
-  bunyanFactory = (options, cb) => {
+  bunyanFactory(options, cb) {
     cb = cb || noop;
     const defaultOpts = {};
     this.options = _.defaultsDeep(options, defaultOpts);
@@ -91,7 +93,7 @@ class LogManager extends EventEmitter {
     }
 
     return bunyan.createLogger(bunyanConfig);
-  };
+  }
 
   /**
    * Creates a logger instance
@@ -99,30 +101,30 @@ class LogManager extends EventEmitter {
    * @param {Object} [options={}]
    * @param {Function} [cb=null]
    */
-  loggerFactory = (options, cb) => {
+  loggerFactory(options, cb) {
     const defaultOpts = {};
     options = _.defaultsDeep(options, defaultOpts);
 
     const log = this.bunyanFactory(options, cb);
 
     return _proxyMethods(log, ['info', 'warn', 'error', 'trace', 'fatal'], () => this._incWaiting());
-  };
+  }
 
   /**
    * @private
    */
-  _incWaiting = () => {
+  _incWaiting() {
     this.waiting += 1;
-  };
+  }
 
   /**
    * @private
    */
-  _decWaiting = () => {
+  _decWaiting() {
     this.waiting -= 1;
-  };
+  }
 
-  getWaiting = () => {
+  getWaiting() {
     return this.waiting;
   }
 }
