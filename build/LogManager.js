@@ -99,6 +99,7 @@ var LogManager = function (_EventEmitter) {
     _this.waiting = 0;
     _this.bunyanFactory = _this.bunyanFactory.bind(_this);
     _this.loggerFactory = _this.loggerFactory.bind(_this);
+    _this.getWaiting = _this.getWaiting.bind(_this);
     return _this;
   }
 
@@ -117,7 +118,7 @@ var LogManager = function (_EventEmitter) {
 
       cb = cb || noop;
       var defaultOpts = {};
-      this.options = _.defaultsDeep(options, defaultOpts);
+      options = _.defaultsDeep(options, defaultOpts);
 
       var client = new Bunyan2Loggly(this.logglyConfig, null, null, function () {
         cb();
