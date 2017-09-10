@@ -4,7 +4,7 @@ const Bunyan2Loggly = require('bunyan-loggly');
 const EventEmitter = require('events');
 const _ = require('lodash');
 
-const isTest = () => process.node.env === 'test';
+const isTest = () => process.env.NODE_ENV === 'test';
 const noop = () => true;
 
 /**
@@ -12,9 +12,10 @@ const noop = () => true;
  * @param {Object} obj
  * @param {Array} methods
  * @param {Function} proxy
+ * @private
  * @returns {Object}
  */
-function proxyMethods(obj, methods, proxy) {
+function _proxyMethods(obj, methods, proxy) {
   const handler = {
     get(target, propKey) {
       const origMethod = target[propKey];
@@ -35,6 +36,7 @@ function proxyMethods(obj, methods, proxy) {
 
 /**
  * @class LogManager
+ * @extends EventEmitter
  * @see https://www.loggly.com/docs/node-js-logs/
  * @see https://github.com/trentm/node-bunyan
  */
@@ -48,6 +50,8 @@ class LogManager extends EventEmitter {
   }
 
   /**
+   * Creates a bunyan instance
+   * @memberOf LogManager
    * @param {Object} [options={}]
    * @param {Function} [cb=noop]
    */
@@ -78,6 +82,8 @@ class LogManager extends EventEmitter {
   }
 
   /**
+   * Creates a logger instance
+   * @memberOf LogManager
    * @param {Object} [options={}]
    * @param {Function} [cb=null]
    */
@@ -87,7 +93,7 @@ class LogManager extends EventEmitter {
 
     const log = this.bunyanFactory(options, cb);
 
-    return proxyMethods(log, ['info', 'warn', 'error', 'trace', 'fatal'], () => this.incWaiting());
+    return _proxyMethods(log, ['info', 'warn', 'error', 'trace', 'fatal'], () => this.incWaiting());
   }
 
   incWaiting() {

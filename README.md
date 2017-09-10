@@ -1,4 +1,4 @@
-# Google Flights Api
+# Yet Another Logger
 
 ## Installation
 
@@ -41,34 +41,15 @@ describe('foo', function() {
 ```
 ## Documentation
 
-## Classes
-
-<dl>
-<dt><a href="#LogManager">LogManager</a></dt>
-<dd></dd>
-</dl>
-
-## Functions
-
-<dl>
-<dt><a href="#proxyMethods">proxyMethods(obj, methods, proxy)</a> ⇒ <code>Object</code></dt>
-<dd></dd>
-</dl>
-
 <a name="LogManager"></a>
 
-## LogManager
+## LogManager ⇐ <code>EventEmitter</code>
 **Kind**: global class  
-<a name="proxyMethods"></a>
+**Extends**: <code>EventEmitter</code>  
+**See**
 
-## proxyMethods(obj, methods, proxy) ⇒ <code>Object</code>
-**Kind**: global function  
-
-| Param | Type |
-| --- | --- |
-| obj | <code>Object</code> | 
-| methods | <code>Array</code> | 
-| proxy | <code>function</code> | 
+- https://www.loggly.com/docs/node-js-logs/
+- https://github.com/trentm/node-bunyan
 
 
 ## Contributing

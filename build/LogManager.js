@@ -35,6 +35,8 @@ function proxyMethods(obj, methods, proxy) {
 
 /**
  * @class LogManager
+ * @see https://www.loggly.com/docs/node-js-logs/
+ * @see https://github.com/trentm/node-bunyan
  */
 class LogManager extends EventEmitter {
   constructor(logglyConfig, options) {
