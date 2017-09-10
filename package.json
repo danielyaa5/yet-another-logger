@@ -57,7 +57,7 @@
     "prettier": "^1.6.0"
   },
   "scripts": {
-    "build": "babel src -d build",
+    "build": "rm -rf build/* && babel src -d build",
     "docs": "jsdoc2md --configure .jsdoc --template README.hbs --files ./src/LogManager.js > README.md",
     "prepublish": "npm run build && npm run docs",
     "precommit": "lint-staged && npm run build && npm run docs && git add .",
