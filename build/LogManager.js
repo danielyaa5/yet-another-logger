@@ -86,14 +86,14 @@ var LogManager = function (_EventEmitter) {
    * @param {String}  logglyConfig.token
    * @param {String}  logglyConfig.subdomain
    * @param {Object}  [options]
-   * @param {Boolean} [options.logToStdoutInDev=true]
+   * @param {String}  [options.stdoutMode='long']
    */
   function LogManager(logglyConfig, options) {
     (0, _classCallCheck3.default)(this, LogManager);
 
     var _this = (0, _possibleConstructorReturn3.default)(this, (LogManager.__proto__ || (0, _getPrototypeOf2.default)(LogManager)).call(this));
 
-    var defaultOpts = { logToStdoutInDev: true };
+    var defaultOpts = { stdoutMode: 'long' };
     _this.options = _.defaultsDeep(options, defaultOpts);
     _this.logglyConfig = logglyConfig;
     _this.waiting = 0;
@@ -134,8 +134,14 @@ var LogManager = function (_EventEmitter) {
         streams: [{ type: 'raw', stream: client }]
       };
 
-      if (isDev() && this.options.logToStdoutInDev) {
-        bunyanConfig.streams.push({ stream: bformat({ outputMode: 'long' }) });
+      // if dev env print debug logs also
+      if (isDev()) {
+        bunyanConfig.level = 'debug';
+      }
+
+      // if dev and enable print logs to stdout
+      if (isDev() && this.options.stdoutMode !== 'silent') {
+        bunyanConfig.streams.push({ stream: bformat({ outputMode: this.options.stdoutMode }) });
       }
 
       return bunyan.createLogger(bunyanConfig);

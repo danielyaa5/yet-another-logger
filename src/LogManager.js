@@ -51,11 +51,11 @@ class LogManager extends EventEmitter {
    * @param {String}  logglyConfig.token
    * @param {String}  logglyConfig.subdomain
    * @param {Object}  [options]
-   * @param {Boolean} [options.logToStdoutInDev=true]
+   * @param {String}  [options.stdoutMode='long']
    */
   constructor(logglyConfig, options) {
     super();
-    const defaultOpts = { logToStdoutInDev: true };
+    const defaultOpts = { stdoutMode: 'long' };
     this.options = _.defaultsDeep(options, defaultOpts);
     this.logglyConfig = logglyConfig;
     this.waiting = 0;
@@ -89,8 +89,14 @@ class LogManager extends EventEmitter {
       streams: [{ type: 'raw', stream: client }],
     };
 
-    if (isDev() && this.options.logToStdoutInDev) {
-      bunyanConfig.streams.push({ stream: bformat({ outputMode: 'long' }) });
+    // if dev env print debug logs also
+    if (isDev()) {
+      bunyanConfig.level = 'debug';
+    }
+
+    // if dev and enable print logs to stdout
+    if (isDev() && this.options.stdoutMode !== 'silent') {
+      bunyanConfig.streams.push({ stream: bformat({ outputMode: this.options.stdoutMode }) });
     }
 
     return bunyan.createLogger(bunyanConfig);
