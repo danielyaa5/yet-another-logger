@@ -163,6 +163,7 @@ var LogManager = function (_EventEmitter) {
       options = _.defaultsDeep(options, defaultOpts);
 
       var log = this.bunyanFactory(options, cb);
+      log.parent = this;
 
       return _proxyMethods(log, ['info', 'warn', 'error', 'trace', 'fatal'], function () {
         return _this3._incWaiting();
