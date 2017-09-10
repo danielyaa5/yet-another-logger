@@ -1,6 +1,6 @@
 {
   "name": "yet-another-logger",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Manage logs with bunyan and loggly.",
   "main": "build/index.js",
   "repository": {
