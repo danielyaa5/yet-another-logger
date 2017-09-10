@@ -4,7 +4,11 @@ const Bunyan2Loggly = require('bunyan-loggly');
 const EventEmitter = require('events');
 const _ = require('lodash');
 
-const isTest = () => process.env.NODE_ENV === 'test';
+const isProd = () => {
+  const prodEnvs = ['production', 'prod'];
+  return prodEnvs.contains(process.env.NODE_ENV);
+};
+const isDev = () => !isProd();
 const noop = () => true;
 
 /**
@@ -41,9 +45,17 @@ function _proxyMethods(obj, methods, proxy) {
  * @see https://github.com/trentm/node-bunyan
  */
 class LogManager extends EventEmitter {
+  /**
+   *
+   * @param {Object}  logglyConfig
+   * @param {String}  logglyConfig.token
+   * @param {String}  logglyConfig.subdomain
+   * @param {Object}  [options]
+   * @param {Boolean} [options.logToStdoutInDev=true]
+   */
   constructor(logglyConfig, options) {
     super();
-    const defaultOpts = {};
+    const defaultOpts = { logToStdoutInDev: true };
     this.options = _.defaultsDeep(options, defaultOpts);
     this.logglyConfig = logglyConfig;
     this.waiting = 0;
@@ -74,7 +86,7 @@ class LogManager extends EventEmitter {
       streams: [{ type: 'raw', stream: client }]
     };
 
-    if (isTest()) {
+    if (isDev() && this.options.logToStdoutInDev) {
       bunyanConfig.streams.push({ stream: bformat({ outputMode: 'long' }) });
     }
 
