@@ -61,7 +61,7 @@ class LogManager extends EventEmitter {
     this.waiting = 0;
     this.bunyanFactory = this.bunyanFactory.bind(this);
     this.loggerFactory = this.loggerFactory.bind(this);
-    this.getWaiting = this.getWaiting.bind(this);
+    this._getWaiting = this._getWaiting.bind(this);
   }
 
   /**

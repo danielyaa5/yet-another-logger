@@ -99,7 +99,7 @@ var LogManager = function (_EventEmitter) {
     _this.waiting = 0;
     _this.bunyanFactory = _this.bunyanFactory.bind(_this);
     _this.loggerFactory = _this.loggerFactory.bind(_this);
-    _this.getWaiting = _this.getWaiting.bind(_this);
+    _this._getWaiting = _this._getWaiting.bind(_this);
     return _this;
   }
 
