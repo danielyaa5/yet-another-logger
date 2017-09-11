@@ -113,7 +113,13 @@ class LogManager extends EventEmitter {
     options = _.defaultsDeep(options, defaultOpts);
 
     const log = this.bunyanFactory(options, cb);
-    log.allDone = doneCb => this.on('done', doneCb);
+    log.onAllLogsReceived = (doneCb) => {
+      if (this._getWaiting() === 0) {
+        return doneCb();
+      }
+      this.on('done', doneCb);
+    };
+    log.getWaiting = this._getWaiting.bind(this);
 
     const levelsToProxy = ['info', 'warn', 'error', 'trace', 'fatal'];
 
@@ -137,7 +143,12 @@ class LogManager extends EventEmitter {
     this.waiting -= 1;
   }
 
-  getWaiting() {
+  /**
+   *
+   * @returns {number}
+   * @private
+   */
+  _getWaiting() {
     return this.waiting;
   }
 }

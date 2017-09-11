@@ -163,9 +163,13 @@ var LogManager = function (_EventEmitter) {
       options = _.defaultsDeep(options, defaultOpts);
 
       var log = this.bunyanFactory(options, cb);
-      log.allDone = function (doneCb) {
-        return _this3.on('done', doneCb);
+      log.onAllLogsReceived = function (doneCb) {
+        if (_this3._getWaiting() === 0) {
+          return doneCb();
+        }
+        _this3.on('done', doneCb);
       };
+      log.getWaiting = this._getWaiting.bind(this);
 
       var levelsToProxy = ['info', 'warn', 'error', 'trace', 'fatal'];
 
@@ -196,9 +200,16 @@ var LogManager = function (_EventEmitter) {
     value: function _decWaiting() {
       this.waiting -= 1;
     }
+
+    /**
+     *
+     * @returns {number}
+     * @private
+     */
+
   }, {
-    key: 'getWaiting',
-    value: function getWaiting() {
+    key: '_getWaiting',
+    value: function _getWaiting() {
       return this.waiting;
     }
   }]);
