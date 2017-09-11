@@ -8,23 +8,27 @@ npm install --save yet-another-logger
 
 ## Usage
 
+Central logger file, lets call `logger.js`
+
+```javascript
+const logger = require('yet-another-logger')({ token: 'blablabla', subdomain: 'bla' });
+module.exports = logger.loggerFactory;
+```
+
+Some other file
 ```javascript
 
 process.env.NODE_ENV = 'test';
 
 const _ = require('lodash');
 const chai = require('chai');
-const LogManager = new require('yet-another-logger')( token: "secret-token", subdomain:"" });
 
-const l = logManager.loggerFactory({ name: 'test/api/flights' });
+const l = require('./logger.js')({ name: 'test/api/flights' });
 const expect = chai.expect;
 
 after(function(done) {
   this.timeout(20 * 1000);
-  logManager.on('done', done);
-  if (logManager.getWaiting() === 0) {
-    return done();
-  }
+  l.onAllLogsReceived(done);
 });
 
 describe('foo', function() {
@@ -37,7 +41,6 @@ describe('foo', function() {
     });
   });
 });
-
 ```
 ## Documentation
 
