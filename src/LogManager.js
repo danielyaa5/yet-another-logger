@@ -113,7 +113,7 @@ class LogManager extends EventEmitter {
     options = _.defaultsDeep(options, defaultOpts);
 
     const log = this.bunyanFactory(options, cb);
-    log.parent = this;
+    log.allDone = doneCb => this.on('done', doneCb);
 
     const levelsToProxy = ['info', 'warn', 'error', 'trace', 'fatal'];
 

@@ -163,7 +163,9 @@ var LogManager = function (_EventEmitter) {
       options = _.defaultsDeep(options, defaultOpts);
 
       var log = this.bunyanFactory(options, cb);
-      log.parent = this;
+      log.allDone = function (doneCb) {
+        return _this3.on('done', doneCb);
+      };
 
       var levelsToProxy = ['info', 'warn', 'error', 'trace', 'fatal'];
 
