@@ -78,7 +78,7 @@ class LogManager extends EventEmitter {
     const client = new Bunyan2Loggly(this.logglyConfig, null, null, () => {
       cb();
       this._decWaiting();
-      if (this.getWaiting() === 0) {
+      if (this._getWaiting() === 0) {
         this.emit('done');
       }
     });

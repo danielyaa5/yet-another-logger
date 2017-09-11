@@ -123,7 +123,7 @@ var LogManager = function (_EventEmitter) {
       var client = new Bunyan2Loggly(this.logglyConfig, null, null, function () {
         cb();
         _this2._decWaiting();
-        if (_this2.getWaiting() === 0) {
+        if (_this2._getWaiting() === 0) {
           _this2.emit('done');
         }
       });
