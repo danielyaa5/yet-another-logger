@@ -10,12 +10,14 @@ npm install --save yet-another-logger
 
 Central logger file, lets call `logger.js`
 
+
 ```javascript
 const logger = require('yet-another-logger')({ token: 'blablabla', subdomain: 'bla' });
 module.exports = logger.loggerFactory;
 ```
-
 Some other file
+
+
 ```javascript
 
 process.env.NODE_ENV = 'test';
@@ -55,7 +57,8 @@ describe('foo', function() {
 
 <dl>
 <dt><a href="#logManagerFactory">logManagerFactory(logglyConfig, [options])</a></dt>
-<dd></dd>
+<dd><p>Creates an instance of the LogManager class</p>
+</dd>
 </dl>
 
 <a name="LogManager"></a>
@@ -68,10 +71,42 @@ describe('foo', function() {
 - https://www.loggly.com/docs/node-js-logs/
 - https://github.com/trentm/node-bunyan
 
+
+* [LogManager](#LogManager) ⇐ <code>EventEmitter</code>
+    * [.bunyanFactory([options], [cb])](#LogManager+bunyanFactory)
+    * [.loggerFactory([options], [cb])](#LogManager+loggerFactory)
+
+<a name="LogManager+bunyanFactory"></a>
+
+### logManager.bunyanFactory([options], [cb])
+Creates a bunyan instance
+
+**Kind**: instance method of [<code>LogManager</code>](#LogManager)  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| [options] | <code>Object</code> | <code>{}</code> | 
+| [cb] | <code>function</code> | <code>noop</code> | 
+
+<a name="LogManager+loggerFactory"></a>
+
+### logManager.loggerFactory([options], [cb])
+Creates a logger instance
+
+**Kind**: instance method of [<code>LogManager</code>](#LogManager)  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| [options] | <code>Object</code> | <code>{}</code> | 
+| [cb] | <code>function</code> | <code></code> | 
+
 <a name="logManagerFactory"></a>
 
 ## logManagerFactory(logglyConfig, [options])
+Creates an instance of the LogManager class
+
 **Kind**: global function  
+**See**: LogManager  
 
 | Param | Type | Default |
 | --- | --- | --- |

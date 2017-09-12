@@ -10,12 +10,14 @@ npm install --save yet-another-logger
 
 Central logger file, lets call `logger.js`
 
+
 ```javascript
 const logger = require('yet-another-logger')({ token: 'blablabla', subdomain: 'bla' });
 module.exports = logger.loggerFactory;
 ```
-
 Some other file
+
+
 ```javascript
 
 process.env.NODE_ENV = 'test';

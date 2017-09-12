@@ -66,7 +66,8 @@ class LogManager extends EventEmitter {
 
   /**
    * Creates a bunyan instance
-   * @memberOf LogManager
+   * @memberOf LogManager.prototype
+   * @method bunyanFactory
    * @param {Object} [options={}]
    * @param {Function} [cb=noop]
    */
@@ -104,7 +105,8 @@ class LogManager extends EventEmitter {
 
   /**
    * Creates a logger instance
-   * @memberOf LogManager
+   * @memberOf LogManager.prototype
+   * @method loggerFactory
    * @param {Object} [options={}]
    * @param {Function} [cb=null]
    */
@@ -130,6 +132,9 @@ class LogManager extends EventEmitter {
   }
 
   /**
+   * Increment waiting log messages
+   * @memberOf LogManager.prototype
+   * @method _incWaiting
    * @private
    */
   _incWaiting() {
@@ -137,6 +142,9 @@ class LogManager extends EventEmitter {
   }
 
   /**
+   * Decrement waiting log messages
+   * @memberOf LogManager.prototype
+   * @method _decWaiting
    * @private
    */
   _decWaiting() {
@@ -144,7 +152,9 @@ class LogManager extends EventEmitter {
   }
 
   /**
-   *
+   * Get waiting log messages
+   * @memberOf LogManager.prototype
+   * @method _getWaiting
    * @returns {number}
    * @private
    */
@@ -154,7 +164,8 @@ class LogManager extends EventEmitter {
 }
 
 /**
- *
+ * Creates an instance of the LogManager class
+ * @see LogManager
  * @param {Object}  logglyConfig
  * @param {String}  logglyConfig.token
  * @param {String}  logglyConfig.subdomain

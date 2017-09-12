@@ -105,7 +105,8 @@ var LogManager = function (_EventEmitter) {
 
   /**
    * Creates a bunyan instance
-   * @memberOf LogManager
+   * @memberOf LogManager.prototype
+   * @method bunyanFactory
    * @param {Object} [options={}]
    * @param {Function} [cb=noop]
    */
@@ -149,7 +150,8 @@ var LogManager = function (_EventEmitter) {
 
     /**
      * Creates a logger instance
-     * @memberOf LogManager
+     * @memberOf LogManager.prototype
+     * @method loggerFactory
      * @param {Object} [options={}]
      * @param {Function} [cb=null]
      */
@@ -182,6 +184,9 @@ var LogManager = function (_EventEmitter) {
     }
 
     /**
+     * Increment waiting log messages
+     * @memberOf LogManager.prototype
+     * @method _incWaiting
      * @private
      */
 
@@ -192,6 +197,9 @@ var LogManager = function (_EventEmitter) {
     }
 
     /**
+     * Decrement waiting log messages
+     * @memberOf LogManager.prototype
+     * @method _decWaiting
      * @private
      */
 
@@ -202,7 +210,9 @@ var LogManager = function (_EventEmitter) {
     }
 
     /**
-     *
+     * Get waiting log messages
+     * @memberOf LogManager.prototype
+     * @method _getWaiting
      * @returns {number}
      * @private
      */
@@ -217,7 +227,8 @@ var LogManager = function (_EventEmitter) {
 }(EventEmitter);
 
 /**
- *
+ * Creates an instance of the LogManager class
+ * @see LogManager
  * @param {Object}  logglyConfig
  * @param {String}  logglyConfig.token
  * @param {String}  logglyConfig.subdomain
