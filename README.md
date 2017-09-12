@@ -30,6 +30,7 @@ const expect = chai.expect;
 
 after(function(done) {
   this.timeout(20 * 1000);
+  console.log(l.getWaiting()) // prints number of logs waiting for confirmation from loggly
   l.onAllLogsReceived(done);
 });
 
