@@ -145,7 +145,7 @@ var LogManager = function (_EventEmitter) {
 
       // if dev and enable print logs to stdout
       if (isDev() && this.options.stdoutMode !== 'silent') {
-        bunyanConfig.streams.push({ stream: bformat({ outputMode: this.options.stdoutMode }) });
+        bunyanConfig.streams.push({ stream: bformat(this.options.bformat) });
       }
 
       return bunyan.createLogger(bunyanConfig);
