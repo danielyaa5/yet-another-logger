@@ -81,19 +81,22 @@ var LogManager = function (_EventEmitter) {
   (0, _inherits3.default)(LogManager, _EventEmitter);
 
   /**
-   *
+   * @see https://www.npmjs.com/package/bunyan-format
    * @param {Object}  logglyConfig
    * @param {String}  logglyConfig.token
    * @param {String}  logglyConfig.subdomain
    * @param {Object}  [options]
-   * @param {String}  [options.stdoutMode='long']
+   * @param {Object}  [options.bformat] - Config options for bunyan format npm module
+   * @param {String}  [options.bformat.stdoutMode='long']
+   * @param {String}  [options.bformat.colorFromLevel={10: 'white', 20: 'cyan'}]
    */
   function LogManager(logglyConfig, options) {
     (0, _classCallCheck3.default)(this, LogManager);
 
     var _this = (0, _possibleConstructorReturn3.default)(this, (LogManager.__proto__ || (0, _getPrototypeOf2.default)(LogManager)).call(this));
 
-    var defaultOpts = { stdoutMode: 'long' };
+    var defaultBformat = { stdoutMode: 'long', colorFromLevel: { 10: 'white', 20: 'cyan' } };
+    var defaultOpts = { bformat: defaultBformat };
     _this.options = _.defaultsDeep(options, defaultOpts);
     _this.logglyConfig = logglyConfig;
     _this.waiting = 0;

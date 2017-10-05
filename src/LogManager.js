@@ -46,16 +46,19 @@ function _proxyMethods(obj, methods, proxy) {
  */
 class LogManager extends EventEmitter {
   /**
-   *
+   * @see https://www.npmjs.com/package/bunyan-format
    * @param {Object}  logglyConfig
    * @param {String}  logglyConfig.token
    * @param {String}  logglyConfig.subdomain
    * @param {Object}  [options]
-   * @param {String}  [options.stdoutMode='long']
+   * @param {Object}  [options.bformat] - Config options for bunyan format npm module
+   * @param {String}  [options.bformat.stdoutMode='long']
+   * @param {String}  [options.bformat.colorFromLevel={10: 'white', 20: 'cyan'}]
    */
   constructor(logglyConfig, options) {
     super();
-    const defaultOpts = { stdoutMode: 'long' };
+    const defaultBformat = { stdoutMode: 'long', colorFromLevel: { 10: 'white', 20: 'cyan' } };
+    const defaultOpts = { bformat: defaultBformat };
     this.options = _.defaultsDeep(options, defaultOpts);
     this.logglyConfig = logglyConfig;
     this.waiting = 0;
