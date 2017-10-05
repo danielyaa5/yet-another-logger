@@ -12,8 +12,14 @@ Central logger file, lets call `logger.js`
 
 
 ```javascript
-const logger = require('yet-another-logger')({ token: 'blablabla', subdomain: 'bla' });
-module.exports = logger.loggerFactory;
+const logManager = require('yet-another-logger');
+
+const logglyConfig = {
+  token: 'secret-token',
+  subdomain: 'subdomain name'
+};
+
+global.l = logManager(logglyConfig).loggerFactory({ name: 'app' });
 ```
 Some other file
 
@@ -25,7 +31,6 @@ process.env.NODE_ENV = 'test';
 const _ = require('lodash');
 const chai = require('chai');
 
-const l = require('./logger.js')({ name: 'test/api/flights' });
 const expect = chai.expect;
 
 after(function(done) {
