@@ -56,11 +56,7 @@ function _proxyMethods(obj, methods, proxy) {
       }
 
       return function () {
-        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-          args[_key] = arguments[_key];
-        }
-
-        var result = origMethod.apply(this, args);
+        var result = origMethod.apply(undefined, arguments);
         proxy();
         return result;
       };
@@ -181,9 +177,7 @@ var LogManager = function (_EventEmitter) {
       if (isDev()) {
         levelsToProxy.push('debug');
       }
-      return _proxyMethods(log, levelsToProxy, function () {
-        return _this3._incWaiting();
-      });
+      return _proxyMethods(log, levelsToProxy, this._incWaiting);
     }
 
     /**

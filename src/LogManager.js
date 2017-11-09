@@ -28,7 +28,7 @@ function _proxyMethods(obj, methods, proxy) {
       }
 
       return function (...args) {
-        const result = origMethod.apply(this, args);
+        const result = origMethod(...args);
         proxy();
         return result;
       };
@@ -131,7 +131,7 @@ class LogManager extends EventEmitter {
     if (isDev()) {
       levelsToProxy.push('debug');
     }
-    return _proxyMethods(log, levelsToProxy, () => this._incWaiting());
+    return _proxyMethods(log, levelsToProxy, this._incWaiting);
   }
 
   /**
