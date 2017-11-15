@@ -5,7 +5,7 @@
   "main": "build/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/danielyaa5/google-flights-api.git"
+    "url": "git+https://github.com/danielyaa5/yet-another-logger.git"
   },
   "lint-staged": {
     "*.{js,jsx}": [
