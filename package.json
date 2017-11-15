@@ -61,7 +61,7 @@
   "scripts": {
     "build": "rm -rf build/* && babel src -d build",
     "docs": "jsdoc2md --configure .jsdoc --template README.hbs --files ./src/LogManager.js > README.md",
-    "prepublish": "npm run build && npm run docs",
+    "prepare": "npm run build && npm run docs",
     "precommit": "lint-staged && npm run build && npm run docs && git add .",
     "lint-js": "eslint --ignore-path .gitignore --quiet --ignore-pattern \"!**/.*\" .",
     "lint": "npm run lint-js",
