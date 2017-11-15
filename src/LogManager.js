@@ -28,7 +28,7 @@ function _proxyMethods(obj, methods, proxy) {
       }
 
       return function (...args) {
-        const result = origMethod(...args);
+        const result = origMethod.apply(obj, args);
         proxy();
         return result;
       };

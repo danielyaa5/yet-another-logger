@@ -56,7 +56,11 @@ function _proxyMethods(obj, methods, proxy) {
       }
 
       return function () {
-        var result = origMethod.apply(undefined, arguments);
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+          args[_key] = arguments[_key];
+        }
+
+        var result = origMethod.apply(obj, args);
         proxy();
         return result;
       };
