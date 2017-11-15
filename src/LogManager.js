@@ -65,6 +65,7 @@ class LogManager extends EventEmitter {
     this.bunyanFactory = this.bunyanFactory.bind(this);
     this.loggerFactory = this.loggerFactory.bind(this);
     this._getWaiting = this._getWaiting.bind(this);
+    this._incWaiting = this._incWaiting.bind(this);
   }
 
   /**
@@ -124,7 +125,7 @@ class LogManager extends EventEmitter {
       }
       this.on('done', doneCb);
     };
-    log.getWaiting = this._getWaiting.bind(this);
+    log.getWaiting = this._getWaiting;
 
     const levelsToProxy = ['info', 'warn', 'error', 'trace', 'fatal'];
 

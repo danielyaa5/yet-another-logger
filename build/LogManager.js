@@ -103,6 +103,7 @@ var LogManager = function (_EventEmitter) {
     _this.bunyanFactory = _this.bunyanFactory.bind(_this);
     _this.loggerFactory = _this.loggerFactory.bind(_this);
     _this._getWaiting = _this._getWaiting.bind(_this);
+    _this._incWaiting = _this._incWaiting.bind(_this);
     return _this;
   }
 
@@ -174,7 +175,7 @@ var LogManager = function (_EventEmitter) {
         }
         _this3.on('done', doneCb);
       };
-      log.getWaiting = this._getWaiting.bind(this);
+      log.getWaiting = this._getWaiting;
 
       var levelsToProxy = ['info', 'warn', 'error', 'trace', 'fatal'];
 
